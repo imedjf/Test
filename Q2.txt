@@ -1,0 +1,18 @@
+from flask import Flask, jsonify
+import csv
+
+app = Flask(__name__)
+
+@app.route('/read/first-chunk', methods=['GET'])
+def read_first_chunk():
+    data = []
+    with open('data.csv', newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            data.append(row)
+            if len(data) == 10:  # Stop after reading 10 lines
+                break
+    return jsonify(data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
